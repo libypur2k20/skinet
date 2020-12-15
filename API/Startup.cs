@@ -15,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using Core.Interfaces;
+using API.Helpers;
+using AutoMapper;
 
 namespace API
 {
@@ -31,6 +33,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Register the generic repository.
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddControllers();
@@ -57,6 +62,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
