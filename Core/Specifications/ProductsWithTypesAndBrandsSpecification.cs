@@ -13,7 +13,7 @@ namespace Core.Specifications
         public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productParams)
 	: base( x => 
 		(!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-		(!producParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId) &&
+		(!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId) &&
 		(String.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search))
 	)
         {
@@ -22,7 +22,7 @@ namespace Core.Specifications
 
 	    if (!String.IsNullOrEmpty(productParams.Sort))
 	    {
-		swtich(productParams.Sort)
+		switch(productParams.Sort)
 		{
 		    case "priceAsc":
 			AddOrderBy(p => p.Price);
