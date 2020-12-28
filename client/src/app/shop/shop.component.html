@@ -8,7 +8,7 @@
     <div class="row">
         <!-- FILTERS -->
         <section class="col-3">
-            <!-- Search -->
+            <!-- Sort -->
             <h5 class="text-warning ml-3">Sort</h5>
             <select class="custom-select mb-3 mt-1" 
             (change)="onSortSelected($event.target.value)"
@@ -49,23 +49,17 @@
         <section class="col-9">
             <div class="d-flex justify-content-between align-items-center pb-2">
 
-                <header>
-                    <span *ngIf="this.totalCount && this.totalCount > 0">Showing 
-                        <strong>
-                            {{this.shopParams.showItemsRange(this.totalCount)}}
-                    </strong> of 
-                    <strong>
-                        {{this.totalCount}}
-                    </strong> Results</span>
-                    <span *ngIf="this.totalCount === 0">
-                        There are <strong>0</strong> results for this filter
-                    </span>
-                </header> 
+                <!-- src/app/shared/components/paging-header -->
+                <app-paging-header 
+                    [totalCount]="this.totalCount" 
+                    [pageSize]="this.shopParams.pageSize" 
+                    [pageNumber]="this.shopParams.pageIndex">
+                </app-paging-header>
 
                 <div class="form-inline mt-2">
-                    <input class="form-control mr-2" style="width:300px" placeholder="Search" type="text">
-                    <button class="btn btn-outline-primary my-2">Search</button>
-                    <button class="btn btn-outline-success ml-2 my-2">Reset</button>
+                    <input class="form-control mr-2" #search style="width:300px" placeholder="Search" type="text" (keyup.enter)="this.onSearchRequest()">
+                    <button class="btn btn-outline-primary my-2" (click)="this.onSearchRequest()" >Search</button>
+                    <button class="btn btn-outline-success ml-2 my-2" (click)="this.onSearchReset()">Reset</button>
                 </div>               
             </div>
 
@@ -77,17 +71,11 @@
 
               
               <div class="d-flex justify-content-center" *ngIf="this.totalCount && this.totalCount > 0">
-                <pagination 
-                    [boundaryLinks]="true" 
-                    [totalItems]="this.totalCount"
-                    (pageChanged)="onPageChange($event)"
-                    [itemsPerPage]=this.shopParams.pageSize
-                    previousText="&lsaquo;"
-                    nextText="&rsaquo;"
-                    firstText="&laquo;"
-                    lastText="&raquo;"
-                    > 
-                </pagination>                  
+                 <app-pager
+                 [pageSize]="this.shopParams.pageSize"
+                 [totalCount]="this.totalCount"
+                 (pageChanged)="onPageChange($event)"
+                 ></app-pager>
               </div>
 
         </section>

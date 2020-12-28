@@ -1,0 +1,12 @@
+<header>
+    <span *ngIf="this.totalCount && this.totalCount > 0">Showing 
+        <strong>
+            {{this.showItemsRange(this.totalCount)}}
+    </strong> of 
+    <strong>
+        {{this.totalCount}}
+    </strong> Results</span>
+    <span *ngIf="this.totalCount === 0">
+        There are <strong>0</strong> results for this filter
+    </span>
+</header> 

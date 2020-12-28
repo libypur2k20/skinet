@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IBrand } from '../shared/models/brand';
 import { IProduct } from '../shared/models/product';
 import { IType } from '../shared/models/productType';
@@ -11,6 +11,9 @@ import {ShopParams} from '../shared/models/shopParams';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
+
+  // Reference to the input #search element on the .html component file.
+  @ViewChild('search', {static: true}) searchTerm: ElementRef;
 
   products: IProduct[] = [];
   brands: IBrand[] = [];
@@ -65,11 +68,13 @@ export class ShopComponent implements OnInit {
 
   onBrandSelected(brandId: number){
     this.shopParams.brandId = brandId;
+    this.shopParams.pageIndex = 1;
     this.getProducts();
   }
 
   onTypeSelected(typeId: number){
     this.shopParams.typeId = typeId;
+    this.shopParams.pageIndex = 1;
     this.getProducts();
   }
 
@@ -79,7 +84,28 @@ export class ShopComponent implements OnInit {
   }
 
   onPageChange(event: any){
-    this.shopParams.pageIndex = event.page;
+    // this.shopParams.pageIndex = event.page;
+
+    // If any pagination's html element properties changes, the pageChanged
+    // event is fired. To prevent to fire the event more than once, we check
+    // if page index has changed.
+      if (this.shopParams.pageIndex !== event){
+      // The pager component emits the page number as the only event's content.
+      this.shopParams.pageIndex = event;
+      this.getProducts();
+    }
+  }
+
+  onSearchRequest(){
+    this.shopParams.search = this.searchTerm.nativeElement.value;
+    this.shopParams.pageIndex = 1;
+    this.getProducts();
+  }
+
+  onSearchReset(){
+    this.searchTerm.nativeElement.value = '';
+    this.shopParams.search = '';
+    this.shopParams.pageIndex = 1;
     this.getProducts();
   }
 
