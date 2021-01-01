@@ -22,7 +22,9 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
     CoreModule,
     HomeModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true} ],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true} 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

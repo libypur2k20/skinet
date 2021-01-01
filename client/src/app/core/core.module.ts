@@ -21,6 +21,6 @@ import { ToastrModule } from 'ngx-toastr';
       }
     )
   ],
-  exports: [NavBarComponent, TestErrorComponent]
+  exports: [NavBarComponent, TestErrorComponent, NotFoundComponent, ServerErrorComponent]
 })
 export class CoreModule { }
