@@ -17,4 +17,8 @@ export class SectionHeaderComponent implements OnInit {
     this.breadcrumbs$ = this.bcService.breadcrumbs$;
   }
 
+  checkIsNaN(breadcrumb: string): boolean{
+    return isNaN(+breadcrumb);
+  }
+
 }

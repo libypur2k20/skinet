@@ -1,7 +1,10 @@
 <!-- The 'asyc' pipe subscribes automatically to 'breadcrumbs$' observable.
 When the component is destroyed, it unsubscribes from the observable. -->
 <ng-container *ngIf="(breadcrumbs$ | async) as breadcrumbs">
-<section *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label !== 'Home'" class="py-5" style="margin-top:105px; background-color:#f5f5f5;">
+<section *ngIf="breadcrumbs.length > 0 &&
+     breadcrumbs[breadcrumbs.length-1].label !== 'Home' &&
+     checkIsNaN(breadcrumbs[breadcrumbs.length-1].label)"
+      class="py-5" style="margin-top:105px; background-color:#f5f5f5;">
     <div class="container">
         <div class="d-flex align-items-center row">
             <div class="col-8">

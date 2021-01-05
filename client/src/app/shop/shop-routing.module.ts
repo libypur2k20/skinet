@@ -16,14 +16,5 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class ShopRoutingModule {
 
-  /**
-   *
-   */
-  constructor() {
-    this.super.set('@productDetails','');
-  }
-
-  
- }
+export class ShopRoutingModule {}

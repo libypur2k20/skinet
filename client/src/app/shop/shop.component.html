@@ -10,8 +10,8 @@
         <section class="col-3">
             <ng-container *ngIf="brands && brands.length > 0 && types && types.length > 0">
                 <!-- Sort -->
-                <h5 class="text-warning ml-3">Sort</h5>
-                <select class="custom-select mb-3 mt-1" 
+                <h5 class="text-warning ml-3 mt-4">Sort</h5>
+                <select class="custom-select mb-3 mt-3" 
                 (change)="onSortSelected($event.target.value)"
                 >
                     <option *ngFor="let sort of sortOptions"
@@ -57,7 +57,7 @@
                         [pageNumber]="this.shopParams.pageIndex">
                     </app-paging-header>
 
-                    <div class="form-inline mt-2" *ngIf="this.totalCount && this.totalCount > 0">
+                    <div class="form-inline" *ngIf="this.totalCount && this.totalCount > 0">
                         <input class="form-control mr-2" #search style="width:300px" placeholder="Search" type="text" (keyup.enter)="this.onSearchRequest()">
                         <button class="btn btn-outline-primary my-2" (click)="this.onSearchRequest()" >Search</button>
                         <button class="btn btn-outline-success ml-2 my-2" (click)="this.onSearchReset()">Reset</button>
