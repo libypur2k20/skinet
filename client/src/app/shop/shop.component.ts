@@ -13,7 +13,7 @@ import {ShopParams} from '../shared/models/shopParams';
 export class ShopComponent implements OnInit {
 
   // Reference to the input #search element on the .html component file.
-  @ViewChild('search', {static: true}) searchTerm: ElementRef;
+  @ViewChild('search', {static: false}) searchTerm: ElementRef;
 
   products: IProduct[] = [];
   brands: IBrand[] = [];
