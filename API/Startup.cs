@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -31,6 +32,12 @@ namespace API
             services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+            });
+            
+            //Redis
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"),true);
+                return ConnectionMultiplexer.Connect(configuration);
             });
 
             //Extensions
