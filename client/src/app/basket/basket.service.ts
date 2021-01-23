@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Basket, IBasket, IBasketItem } from '../shared/models/basket';
+import { Basket, IBasket, IBasketItem, IBasketTotals } from '../shared/models/basket';
 import { IProduct } from '../shared/models/product';
 
 @Injectable({
@@ -15,6 +15,10 @@ export class BasketService {
   private basketSource = new BehaviorSubject<IBasket>(null);
   basket$ = this.basketSource.asObservable();
 
+  private basketTotalsSource = new BehaviorSubject<IBasketTotals>(null);
+  basketTotals$ = this.basketTotalsSource.asObservable();
+
+
   constructor(private http: HttpClient) { }
 
 
@@ -24,6 +28,18 @@ export class BasketService {
     const basket: IBasket = this.getCurrentBasketValue() ?? this.CreateBasket();
     basket.items = this.AddOrUpdateBasketItem(basket.items, itemToAdd, quantity);
     return this.setBasket(basket);
+  }
+
+
+
+  private CalculateTotals(){
+      const basket = this.getCurrentBasketValue();
+      if (basket !== null){
+        const shipping = 0;
+        const subtotal = basket.items.reduce((subT, elem) => (elem.price * elem.quantity) + subT, 0);
+        const total = shipping + subtotal;
+        this.basketTotalsSource.next({shipping, subtotal, total});
+      }
   }
 
 
@@ -66,19 +82,24 @@ export class BasketService {
 
 
   getBasket(id: string){
-    this.http.get(this.apiUrl + 'basket?id=' + id)
+    return this.http.get(this.apiUrl + 'basket?id=' + id)
     .pipe(
       map((basket: IBasket) => {
         this.basketSource.next(basket);
-        console.log(this.getCurrentBasketValue());
+        this.CalculateTotals();
+        // console.log(this.getCurrentBasketValue());
       })
     );
   }
 
 
   setBasket(basket: IBasket){
-    this.http.post(this.apiUrl + 'basket', basket)
-    .subscribe((bs: IBasket) => {this.basketSource.next(bs); console.log(bs); },
+    return this.http.post(this.apiUrl + 'basket', basket)
+    .subscribe((bs: IBasket) => {
+      this.basketSource.next(bs);
+      this.CalculateTotals();
+      // console.log(bs);
+      },
     error => {
       console.log(error);
     });
