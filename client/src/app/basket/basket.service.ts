@@ -23,9 +23,15 @@ export class BasketService {
 
 
   addItemToBasket(item: IProduct, quantity = 1){
-
     const itemToAdd: IBasketItem = this.ConvertProductToBasketITem(item, quantity);
     const basket: IBasket = this.getCurrentBasketValue() ?? this.CreateBasket();
+    basket.items = this.AddOrUpdateBasketItem(basket.items, itemToAdd, quantity);
+    return this.setBasket(basket);
+  }
+
+  updateBasketItemQuantity(productId: number, quantity: number){
+    const basket = this.getCurrentBasketValue();
+    const itemToAdd: IBasketItem = basket.items[basket.items.findIndex(i => i.id === productId)];
     basket.items = this.AddOrUpdateBasketItem(basket.items, itemToAdd, quantity);
     return this.setBasket(basket);
   }
@@ -53,10 +59,35 @@ export class BasketService {
     }
     else
     {
-      items[itemIndex].quantity += quantity;
+      const itemQuantity = items[itemIndex].quantity;
+      const newQuantity = (itemQuantity + quantity);
+      items[itemIndex].quantity = (newQuantity > 0 ? newQuantity : items[itemIndex].quantity);
     }
 
     return items;
+
+  }
+
+
+  removeItemFromBasket(item: IBasketItem)
+  {
+    const basket: IBasket = this.getCurrentBasketValue();
+    // const itemIndex = basket.items.findIndex(i => i.id === item.id);
+    // if (itemIndex !== -1){
+    //  basket.items.splice(itemIndex, 1);
+    //  this.setBasket(basket);
+    // }
+    if (basket.items.some(i => i.id === item.id)){
+        basket.items = basket.items.filter(i => i.id !== item.id);
+        if (basket.items.length > 0)
+        {
+          this.setBasket(basket);
+        }
+        else
+        {
+          this.deleteBasket(basket);
+        }
+    }
 
   }
 
@@ -78,6 +109,20 @@ export class BasketService {
     const basket = new Basket();
     localStorage.setItem('basket_id', basket.id);
     return basket;
+  }
+
+
+  private deleteBasket(basket: IBasket){
+
+    return this.http.delete(this.apiUrl + 'basket?id=' + basket.id)
+    .subscribe(() => {
+      this.basketSource.next(null);
+      this.basketTotalsSource.next(null);
+      localStorage.removeItem('basket_id');
+    }, error =>{
+      console.log(error);
+    });
+
   }
 
 

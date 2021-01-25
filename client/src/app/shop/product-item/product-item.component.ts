@@ -18,7 +18,6 @@ export class ProductItemComponent implements OnInit {
 
   addItemToBasket(){
     this.basketService.addItemToBasket(this.product);
-    console.log(this.basketService.getCurrentBasketValue());
   }
 
 }
