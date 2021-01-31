@@ -3,6 +3,7 @@ using API.Helpers;
 using API.Middleware;
 using AutoMapper;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,16 @@ namespace API
             //Register the generic repository.
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
+
+            //DbContext
             services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<AppIdentityDbContext>(options =>{
+                options.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+            });
+
             
             //Redis
             services.AddSingleton<IConnectionMultiplexer>(c => {
@@ -42,6 +49,7 @@ namespace API
 
             //Extensions
             services.AddApplicationServices();
+            services.AddIdentityServices();
             services.AddSwaggerDocumentation();
 
 	    //Configuring CORS
