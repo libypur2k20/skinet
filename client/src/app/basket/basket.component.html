@@ -1,10 +1,10 @@
 
 <div class="container mt-2">
     <div *ngIf="(basket$ | async) === null">
-        <p>There are no items in your basket</p>
-    </div>
-
-    <div *ngIf="basket$ | async">
+        There are no items in your basket
+    </div>  
+    
+    <div *ngIf="(basket$ | async)">
         <div class="pb-5">
             <div class="container">
                 <div class="row">
@@ -14,19 +14,19 @@
                                 <thead>
                                     <tr>
                                         <th class="border-0 bg-light" scope="col">
-                                            <div class="py-2 px-3 text-uppercase">Product</div>
+                                            <div class="p-2 px-3 text-uppercase">Product</div>
+                                        </th>                                     
+                                        <th class="border-0 bg-light" scope="col">
+                                            <div class="p-2 px-3 text-uppercase">Price</div>
                                         </th>
                                         <th class="border-0 bg-light" scope="col">
-                                            <div class="py-2 px-3 text-uppercase">Price</div>
+                                            <div class="p-2 px-3 text-uppercase">Quantity</div>
                                         </th>
-                                        <th class="border-0 bg-light">
-                                            <div class="py-2 px-3 text-uppercase">Quantity</div>
+                                        <th class="border-0 bg-light" scope="col">
+                                            <div class="p-2 px-3 text-uppercase">Total</div>
                                         </th>
-                                        <th class="border-0 bg-light text-right">
-                                            <div class="py-2 px-3 text-uppercase">Total</div>
-                                        </th>
-                                        <th class="border-0 bg-light">
-                                            <div class="py-2 px-3 text-uppercase">Remove</div>
+                                        <th class="border-0 bg-light" scope="col">
+                                            <div class="p-2 px-3 text-uppercase">Remove</div>
                                         </th>
                                     </tr>
                                 </thead>
@@ -34,38 +34,38 @@
                                     <tr *ngFor="let item of (basket$ | async).items">
                                         <th scope="row">
                                             <div class="p-2">
-                                                <img src="{{item.pictureUrl}}" alt="{{item.productName}}" class="img-fluid"
-                                                style="max-height: 50px;">
+                                                <img src="{{item.pictureUrl}}" alt="{{item.productName}}"
+                                                class="img-fluid" style="max-height: 50px;">
                                                 <div class="ml-3 d-inline-block align-middle">
                                                     <h5 class="mb-0">
-                                                        <a routerLink="/shop/{{item.id}}"
-                                                        class="text-dark">{{item.productName}}</a>
+                                                        <a routerLink="/shop/{{item.id}}" class="text-dark">
+                                                            {{item.productName}}
+                                                        </a>
                                                     </h5>
-                                                    <span class="text-muted font-weight-normal font-italic d-block">
+                                                    <span class="d-block text-muted font-weight-normal font-italic">
                                                         Type: {{item.type}}
                                                     </span>
                                                 </div>
                                             </div>
                                         </th>
-                                        <td class="align-middle text-right"><strong>{{item.price | currency}}</strong></td>
+                                        <td class="align-middle"><strong>{{item.price | currency}}</strong></td>
                                         <td class="align-middle">
-                                            <div class="d-flex align-items-center ml-3">
-                                                <i class="fa fa-minus-circle text-warning mr-2"
-                                                style="cursor: pointer; font-size: 2em;"></i>
-                                                <span  class="font-weight-bold" style="font-size: 1.5em">{{item.quantity}}</span>
-                                                <i class="fa fa-plus-circle text-warning ml-2"
-                                                style="cursor: pointer; font-size: 2em;"></i>
+                                            <div class="d-flex align-items-center">
+                                                <i class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer; font-size: 2em;" (click)="incrementDecrementQuantity(item.id, -1)"></i>
+                                                <span class="font-weight-bold" style="font-size:1.5em;">{{item.quantity}}</span>
+                                                <i class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 2em;" (click)="incrementDecrementQuantity(item.id, 1)"></i>
                                             </div>
                                         </td>
-                                        <td class="align-middle text-right"><strong>{{item.price * item.quantity | currency}}</strong></td>
+                                        <td class="align-middle"><strong>{{item.price * item.quantity | currency}}</strong></td>
                                         <td class="align-middle text-center">
-                                            <a class="text-danger">
-                                                <i class="fa fa-trash" style="font-size: 2em;"></i>
+                                            <a class="text-danger" (click)="removeItem(item);">
+                                                <i class="fa fa-trash" style="font-size:2em; cursor:pointer;"></i>
                                             </a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -73,8 +73,9 @@
                     <div class="col-6 offset-6">
                         <app-order-totals></app-order-totals>
                         <a routerLink="/checkout" class="btn btn-outline-primary py-2 btn-block">
-                        Proceed to checkout</a>
-                    </div>
+                            Proceed to Checkout
+                        </a> 
+                    </div> 
                 </div>
             </div>
         </div>

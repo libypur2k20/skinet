@@ -15,15 +15,14 @@ export interface IBasketItem {
     type: string;
   }
 
-export interface IBasketTotals {
+export class Basket implements IBasket{
+
+    id = uuidv4();
+    items: IBasketItem[] = [];
+}
+
+export interface IBasketTotals{
   shipping: number;
   subtotal: number;
   total: number;
-}
-
-export class Basket implements IBasket
-{
-    id = uuidv4();
-    items = [];
-
 }
