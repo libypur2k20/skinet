@@ -49,7 +49,7 @@ namespace API
 
             //Extensions
             services.AddApplicationServices();
-            services.AddIdentityServices();
+            services.AddIdentityServices(_config);
             services.AddSwaggerDocumentation();
 
 	    //Configuring CORS
@@ -84,6 +84,8 @@ namespace API
             app.UseStaticFiles();
 
 	        app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();  //JWT Tokens
 
             app.UseAuthorization();
 
